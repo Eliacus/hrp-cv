@@ -1,7 +1,7 @@
  #!/usr/bin/env python
 
 from geometry.msgs.msg import Twist
-from sensor_msgs.msg import CompressedImage
+#from sensor_msgs.msg import CompressedImage
 
 import rospy
 
@@ -22,6 +22,7 @@ import rospy
 
 def callback(data):
     rospy.loginfo(rospy.get_caller_id() + "The cmd_vel is:  %s", data.data)
+
 def node():
     pub = rospy.Publisher('cmd_vel', Twist, queue_size=1)
     rospy.init_node('cam_steer')
