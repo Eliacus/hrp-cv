@@ -25,8 +25,8 @@ import cv2 as cv
 def callback(data):
     # Convert image buffer
     np_arr = np.fromstring(data.data, np.uint8)
-    im = cv.imdecode(np_arr, cv.CV_LOAD_IMAGE_GRAYSCALE)
-    rospy.loginfo(rospy.get_caller_id() + "The Compressed Image Data is:    %s", type(im))
+    im = cv.imdecode(np_arr, 0)
+    rospy.loginfo(rospy.get_caller_id() + "The Compressed Image Data is:    %s", np.shape(im))
 
 def node():
     pub = rospy.Publisher('cmd_vel', Twist, queue_size=10)
@@ -36,8 +36,8 @@ def node():
     while not rospy.is_shutdown():
         #hello_str = "hello world %s" % rospy.get_time()
         twist = Twist()
-        twist.linear.x = 1
-        twist.angular.z = 1
+        twist.linear.x = 0
+        twist.angular.z = 0
         pub.publish(twist)
         rate.sleep()
 
