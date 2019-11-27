@@ -2,10 +2,11 @@
 
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import CompressedImage
-
-import rospy
 from std_msgs.msg import String
 
+import rospy
+import numpy as np
+import cv2 as cv
 
 # CompressedImage message
 #std_msgs/Header header
@@ -22,12 +23,13 @@ from std_msgs.msg import String
 # Create publisher
 
 def callback(data):
-    rospy.loginfo(rospy.get_caller_id() + "The cmd_vel is:  %s", data)
+    im = cv.imdecode(data.data,cv.IMREAD_COLOR)
+    rospy.loginfo(rospy.get_caller_id() + "The Compressed Image Data is:    %s", type(im))
 
 def node():
-    pub = rospy.Publisher('cmd_vel', Twist, queue_size=1)
+    pub = rospy.Publisher('cmd_vel', Twist, queue_size=10)
     rospy.init_node('cam_steer')
-    rospy.Subscriber('cmd_vel', Twist, callback)
+    rospy.Subscriber('raspicam_node/image/compressed', CompressedImage, callback)
     rate = rospy.Rate(10) # 10hz
     while not rospy.is_shutdown():
         #hello_str = "hello world %s" % rospy.get_time()
