@@ -23,7 +23,9 @@ import cv2 as cv
 # Create publisher
 
 def callback(data):
-    im = cv.imdecode(data.data,cv.IMREAD_COLOR)
+    # Convert image buffer
+    np_arr = np.fromstring(data.data, np.uint8)
+    im = cv.imdecode(np_arr, cv.CV_LOAD_IMAGE_GRAYSCALE)
     rospy.loginfo(rospy.get_caller_id() + "The Compressed Image Data is:    %s", type(im))
 
 def node():
