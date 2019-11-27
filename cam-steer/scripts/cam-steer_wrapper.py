@@ -1,4 +1,4 @@
- #!/usr/bin/env python
+#!/usr/bin/env python
 
 #from geometry.msgs.msg import Twist
 #from sensor_msgs.msg import CompressedImage
