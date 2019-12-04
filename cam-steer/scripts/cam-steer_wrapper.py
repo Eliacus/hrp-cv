@@ -28,10 +28,7 @@ def callback(data):
     im = cv.imdecode(np_arr, 0)
 
     # Use im to calculate yaw
-    
-
-
-
+    app.run(im)
     # rospy.loginfo(rospy.get_caller_id() + "The Compressed Image Data is:    %s", np.shape(im))
 
 def node():
@@ -40,8 +37,10 @@ def node():
     rospy.init_node('cam_yaw')
     rospy.Subscriber('raspicam_node/image/compressed', CompressedImage, callback)
     rate = rospy.Rate(10) # 10hz
+    app = App()
+    
     while not rospy.is_shutdown():
-        pub.publish(yaw)    # Change this to yaw variable
+        pub.publish(app.euler_angles[1])    # Change this to yaw variable
         rate.sleep()
 
 
