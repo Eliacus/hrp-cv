@@ -62,7 +62,7 @@ class App:
         rotation = np.array([0.0001, 0.0001, 0.0001])
         translation = np.array([0.0001, 0.0001, 0.0001])
 
-        frame_gray = cv2.cvtColor(pic, cv2.COLOR_BGR2GRAY)
+        frame_gray = cv2.cvtColor(pic, 0)
         vis = frame_gray.copy()
 
         if len(self.tracks) > 0:
