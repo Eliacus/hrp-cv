@@ -2,7 +2,7 @@
 
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import CompressedImage
-from std_msgs.msg import String
+from std_msgs.msg import Float32
 
 import rospy
 import numpy as np
@@ -26,19 +26,22 @@ def callback(data):
     # Convert image buffer
     np_arr = np.fromstring(data.data, np.uint8)
     im = cv.imdecode(np_arr, 0)
-    rospy.loginfo(rospy.get_caller_id() + "The Compressed Image Data is:    %s", np.shape(im))
+
+    # Use im to calculate yaw
+    
+
+
+
+    # rospy.loginfo(rospy.get_caller_id() + "The Compressed Image Data is:    %s", np.shape(im))
 
 def node():
-    pub = rospy.Publisher('cmd_vel', Twist, queue_size=10)
-    rospy.init_node('cam_steer')
+
+    yaw_pub = rospy.Publisher('cam_yaw', Float32, queue_size=1)
+    rospy.init_node('cam_yaw')
     rospy.Subscriber('raspicam_node/image/compressed', CompressedImage, callback)
     rate = rospy.Rate(10) # 10hz
     while not rospy.is_shutdown():
-        #hello_str = "hello world %s" % rospy.get_time()
-        twist = Twist()
-        twist.linear.x = 0
-        twist.angular.z = 0
-        pub.publish(twist)
+        pub.publish(yaw)    # Change this to yaw variable
         rate.sleep()
 
 
