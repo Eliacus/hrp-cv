@@ -30,6 +30,7 @@ class App:
         self.cam = camera_input
         self.frame_idx = 0
         self.prev_gray = None
+        self.euler_angles = [0,0,0]
 
     # Checks if a matrix is a valid rotation matrix.
     def isRotationMatrix(self, R):
@@ -134,24 +135,25 @@ class App:
                 try:
                     M, mask = cv2.findHomography(old_points, new_points, cv2.RANSAC, 5.0)
                 except:
-                    print("No M")
+                    pass
                 try:
                     _, Rs, Ts, Ns = cv2.decomposeHomographyMat(M, K)
                     for i in range(len(Rs)):
                         try:
                             euler_angles = self.rotationMatrixToEulerAngles(Rs[i])
                             rotation += euler_angles
+                            self.euler_angles = rotation
                         except:
-                            print("No euler angles")
+                            pass
 
                 except:
-                    print("No decompose")
+                    pass
 
                 translation += np.array([Ts[0][0][0], Ts[0][1][0], Ts[0][2][0]])
                 translation_all.append(translation)
                 print(rotation)
 
-                for i in range(len(self.tracks)):
+                """for i in range(len(self.tracks)):
                     try:
                         new_point = self.tracks[i][-1]
                         old_point = self.tracks[i][-2]
@@ -195,7 +197,7 @@ class App:
                 yaw_right = q3 + q2
 
                 cv2.arrowedLine(vis, (300, 100), (300 - (int(round(q2+q3))), 100), (0, 0, 255), 3, 8, 0, 0.1)
-                cv2.arrowedLine(vis, (300, 100), (300 + (int(round(q1 + q4))), 100), (255, 0, 0), 3, 8, 0, 0.1)
+                cv2.arrowedLine(vis, (300, 100), (300 + (int(round(q1 + q4))), 100), (255, 0, 0), 3, 8, 0, 0.1)"""
 
             self.frame_idx += 1
             self.prev_gray = frame_gray
@@ -209,21 +211,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    """ Add here the name of the ROS. In ROS, names are unique named.
-    rospy.init_node('lk_node')
-    # subscribe to a topic using rospy.Subscriber class
-    sub = rospy.Subscriber('cam_stream', None, fnc_callback)
-    # publish messages to a topic using rospy.Publisher class
-    pub = rospy.Publisher('control', String, queue_size=1)
-    rate = rospy.Rate(10)
-    tol = 50
-
-    while not rospy.is_shutdown():
-        if yaw_left > tol*yaw_right:
-            pub.publish('d')
-        elif yaw_right > tol*yaw_left:
-            pub.publish('a')
-        else:
-            pub.publish('w')
-        rate.sleep()
-"""
