@@ -3,6 +3,7 @@
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import CompressedImage
 from std_msgs.msg import Float32
+from camera_algo import *
 
 import rospy
 import numpy as np
