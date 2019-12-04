@@ -199,30 +199,10 @@ class App:
 
             self.frame_idx += 1
             self.prev_gray = frame_gray
-            cv2.imshow('lk_track', vis)
-
-
-def animate(i):
-    ax.clear()
-    ax.plot(translation_all[0][:], translation_all[0][:], 'red')
-    fig.show(ax)
-    print("Hello")
-
+            #cv2.imshow('lk_track', vis)
 
 def main():
-    global ax
-    global fig
     app = App(cv2.VideoCapture(0))
-    fig = plt.figure()
-    ax = fig.add_subplot(1, 1, 1)
-    App.run(app)
-    cv2.destroyAllWindows()
-
-
-def fnc_callback():
-    global varS
-    varS = cv2.VideoCapture(0)
-    app = App()
     App.run(app)
     cv2.destroyAllWindows()
 
