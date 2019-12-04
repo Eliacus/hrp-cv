@@ -33,12 +33,10 @@ def callback(data):
     # rospy.loginfo(rospy.get_caller_id() + "The Compressed Image Data is:    %s", np.shape(im))
 
 def node():
-
     pub = rospy.Publisher('cam_yaw', Float32, queue_size=1)
     rospy.init_node('cam_yaw')
     rospy.Subscriber('raspicam_node/image/compressed', CompressedImage, callback)
     rate = rospy.Rate(10) # 10hz
-    app = App()
 
     while not rospy.is_shutdown():
         pub.publish(app.euler_angles[1])    # Change this to yaw variable
@@ -47,6 +45,7 @@ def node():
 
 if __name__ == '__main__':
     try:
+        app = App()
         node()
     except rospy.ROSInterruptException:
         pass
