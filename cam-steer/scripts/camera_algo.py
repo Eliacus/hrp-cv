@@ -114,14 +114,18 @@ class FeatureTracker:
             # Extract the feature points that is used to compute the homeography.
             new_points = []
             old_points = []
+            new_points_1 = []
+            old_points_1 = []
             for i in range(len(self.tracks)):
                 try:
                     vec1 = list(self.tracks[i][-1])
                     vec1.append(1)
                     new_points.append(vec1)
+                    new_points_1.append(self.tracks[i][-1])
                     vec2 = list(self.tracks[i][-2])
                     vec2.append(1)
                     old_points.append(vec2)
+                    old_points_1.append(self.tracks[i][-2])
                 except IndexError:
                     continue
             new_points = np.array(new_points)
@@ -129,7 +133,7 @@ class FeatureTracker:
 
             try:
                 # Compute the M matrx for the homogenious camera equations.
-                M, mask = cv2.findHomography(old_points, new_points, cv2.RANSAC, 5.0)
+                M, mask = cv2.findHomography(old_points_1, new_points_1, cv2.RANSAC, 5.0)
             except:
                 pass
 
