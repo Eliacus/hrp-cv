@@ -143,6 +143,11 @@ class FeatureTracker:
             except:
                 pass
 
+            if self.euler_angles[1] > 0:
+                print("Yaw left")
+            else:
+                print("Yaw right")
+
         # Add one to the frame index.
         self.frame_idx += 1
 
