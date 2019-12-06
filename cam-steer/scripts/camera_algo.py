@@ -116,8 +116,12 @@ class FeatureTracker:
             old_points = []
             for i in range(len(self.tracks)):
                 try:
-                    new_points.append(self.tracks[i][-1])
-                    old_points.append(self.tracks[i][-2])
+                    vec1 = list(self.tracks[i][-1])
+                    vec1.append(1)
+                    new_points.append(vec1)
+                    vec2 = list(self.tracks[i][-2])
+                    vec2.append(1)
+                    old_points.append(vec2)
                 except IndexError:
                     continue
             new_points = np.array(new_points)
@@ -128,22 +132,57 @@ class FeatureTracker:
                 M, mask = cv2.findHomography(old_points, new_points, cv2.RANSAC, 5.0)
             except:
                 pass
-            try:
-                # Extract the rotation, Rs, and translation, Ts, from the M and K matrix.
-                _, Rs, Ts, Ns = cv2.decomposeHomographyMat(M, K)
-                for i in range(len(Rs)):
-                    try:
-                        # From the rotation matrix extract the euler angles, i.e. the difference in direction between the two frames.
-                        euler_angles_frame = self.rotationMatrixToEulerAngles(Rs[i])
 
-                        # Add the euler angles to the total rotation of the robot.
-                        self.euler_angles += euler_angles_frame
-                    except:
-                        pass
+            try:
+                _, Rs, Ts, Ns = cv2.decomposeHomographyMat(M, K)
+
+                neg_pts = []
+
+                old_points = np.matmul(np.invert(K), np.transpose(old_points))
+                new_points = np.matmul(np.invert(K), np.transpose(new_points))
+
+                for i in range(len(Rs)):
+
+                    counter = 0
+
+                    for j in range(min([len(new_points), len(old_points)])):
+                        P1 = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0]]
+                        P2 = []
+                        for k in range(3):
+                            row = Rs[i][k]
+                            row.append(Ts[i][k])
+                            P2.append(row)
+
+                        A = []
+                        for m in range(3):
+                            row = P1[m][0:4]
+                            row.append(-old_points[j][m])
+                            row.append(0)
+                            A.append(row)
+                        for m in range(3):
+                            row = P2[m][0:4]
+                            row.append(0)
+                            row.append(-new_points[j][m])
+                            A.append(row)
+
+                        A = np.array(A)
+                        [U, W, V] = np.linalg.svd(A)
+
+                        V = V / V[3]
+
+                        Xs = V[:, -1]
+
+                        if Xs[4] < 0 or Xs[5] < 0:
+                            counter += 1
+
+                    neg_pts.append(counter)
+
+                ind_R = neg_pts.index(min(neg_pts))
+
+                euler_angles = self.rotationMatrixToEulerAngles(Rs[ind_R])
+                self.euler_angles += euler_angles
             except:
                 pass
-
-            print(self.euler_angles[1])
 
         # Add one to the frame index.
         self.frame_idx += 1
