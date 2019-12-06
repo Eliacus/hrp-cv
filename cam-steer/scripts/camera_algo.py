@@ -70,11 +70,7 @@ class FeatureTracker:
         @param: curr_img, the current image in the image stream.
         """
 
-<<<<<<< HEAD
-        frame_gray = pic
-=======
         frame_gray = cv2.cvtColor(curr_img, cv2.COLOR_BGR2GRAY)
->>>>>>> aa0c7c69fcaa563aa972e915cc54b55eed8d1a9c
         vis = frame_gray.copy()
 
         if len(self.tracks) > 0:
@@ -147,59 +143,7 @@ class FeatureTracker:
             except:
                 pass
 
-<<<<<<< HEAD
-            #translation += np.array([Ts[0][0][0], Ts[0][1][0], Ts[0][2][0]])
-            #translation_all.append(translation)
-
-            """for i in range(len(self.tracks)):
-                try:
-                    new_point = self.tracks[i][-1]
-                    old_point = self.tracks[i][-2]
-
-                    angle = np.arctan((new_point[1]-old_point[1])/(new_point[0]-old_point[0]))
-                    left = 0
-                    if new_point[0]-old_point[0] < 0:
-                        left = 1
-                    dist = np.sqrt((new_point[1]-old_point[1])**2 + (new_point[0]-old_point[0])**2)
-
-                    if 0 < angle < np.pi/2 and left == 0:
-                        q1 += dist
-                        num_q1 += 1
-                    elif 0 < angle < np.pi/2 and left == 1:
-                        q2 += dist
-                        num_q2 += 1
-                    elif -np.pi/2 <= angle < 0 and left == 1:
-                        q3 += dist
-                        num_q3 += 1
-                    elif -np.pi/2 <= angle < 0 and left == 0:
-                        q4 += dist
-                        num_q4 += 1
-
-                except IndexError:
-                    continue
-            if num_q1 > 0:
-                q1 = q1 / num_q1
-            if num_q2 > 0:
-                q2 = q2 / num_q2
-            if num_q3 > 0:
-                q3 = q3 / num_q3
-            if num_q4 > 0:
-                q4 = q4 / num_q4
-
-            if (q1 + q4) > 70*(q3+q2):
-                print("Yaw left")
-            elif (q3 + q2) > 70*(q1 + q4):
-                print("Yaw right")
-
-            yaw_left = q1 + q4
-            yaw_right = q3 + q2
-
-            cv2.arrowedLine(vis, (300, 100), (300 - (int(round(q2+q3))), 100), (0, 0, 255), 3, 8, 0, 0.1)
-            cv2.arrowedLine(vis, (300, 100), (300 + (int(round(q1 + q4))), 100), (255, 0, 0), 3, 8, 0, 0.1)"""
-
-=======
         # Add one to the frame index.
->>>>>>> aa0c7c69fcaa563aa972e915cc54b55eed8d1a9c
         self.frame_idx += 1
 
         # Save the previous grayscale image.
