@@ -134,7 +134,6 @@ class FeatureTracker:
             old_points_1 = np.array(old_points_1)
 
             try:
-                # Compute the M matrx for the homogenious camera equations.
                 M, mask = cv2.findHomography(old_points_1, new_points_1, cv2.RANSAC, 5.0)
             except:
                 pass
@@ -155,8 +154,8 @@ class FeatureTracker:
                         P1 = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0]]
                         P2 = []
                         for k in range(3):
-                            row = Rs[i][k][0:3]
-                            row.append(Ts[i][k])
+                            row = list(Rs[i][k][0:3])
+                            row.append(Ts[i][k][0])
                             P2.append(row)
 
                         A = []
@@ -187,6 +186,7 @@ class FeatureTracker:
 
                 euler_angles = self.rotationMatrixToEulerAngles(Rs[ind_R])
                 self.euler_angles += euler_angles
+
             except:
                 pass
 
