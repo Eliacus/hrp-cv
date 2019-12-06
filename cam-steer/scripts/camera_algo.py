@@ -106,7 +106,7 @@ class FeatureTracker:
                     self.tracks.append([(x, y)])
 
         # The calibrated camera parameters.
-        K = np.array([[976.558219, 0, 637.122052], [0, 974.99846, 456.40230], [0, 0, 1]])
+        K = np.array([[993.567273, 0, 673.844893], [0, 990.695013, 455.833150], [0, 0, 1]])
 
         # Begin the calcualtions when two of more frames are recieved.
         if self.frame_idx >= 2:
