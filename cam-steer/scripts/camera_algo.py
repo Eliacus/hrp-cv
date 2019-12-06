@@ -70,7 +70,7 @@ class FeatureTracker:
         @param: curr_img, the current image in the image stream.
         """
 
-        frame_gray = cv2.cvtColor(curr_img, cv2.COLOR_BGR2GRAY)
+        frame_gray = curr_img
         vis = frame_gray.copy()
 
         if len(self.tracks) > 0:
