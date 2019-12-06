@@ -62,7 +62,7 @@ class App:
         rotation = np.array([0.0001, 0.0001, 0.0001])
         translation = np.array([0.0001, 0.0001, 0.0001])
 
-        frame_gray = cv2.cvtColor(pic, 0)
+        frame_gray = pic
         vis = frame_gray.copy()
 
         if len(self.tracks) > 0:
@@ -135,8 +135,8 @@ class App:
             except:
                 pass
 
-            translation += np.array([Ts[0][0][0], Ts[0][1][0], Ts[0][2][0]])
-            translation_all.append(translation)
+            #translation += np.array([Ts[0][0][0], Ts[0][1][0], Ts[0][2][0]])
+            #translation_all.append(translation)
 
             """for i in range(len(self.tracks)):
                 try:
