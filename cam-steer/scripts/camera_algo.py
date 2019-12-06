@@ -149,18 +149,18 @@ class FeatureTracker:
                         P1 = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0]]
                         P2 = []
                         for k in range(3):
-                            row = Rs[i][k]
+                            row = Rs[i][k][0:3]
                             row.append(Ts[i][k])
                             P2.append(row)
 
                         A = []
                         for m in range(3):
-                            row = P1[m][0:4]
+                            row = P1[m]
                             row.append(-old_points[j][m])
                             row.append(0)
                             A.append(row)
                         for m in range(3):
-                            row = P2[m][0:4]
+                            row = P2[m]
                             row.append(0)
                             row.append(-new_points[j][m])
                             A.append(row)
