@@ -29,7 +29,7 @@ def callback(data):
     im = cv.imdecode(np_arr, 0)
 
     # Use im to calculate yaw
-    app.run(im)
+    tracker.run(im)
     # rospy.loginfo(rospy.get_caller_id() + "The Compressed Image Data is:    %s", np.shape(im))
 
 def node():
@@ -39,13 +39,13 @@ def node():
     rate = rospy.Rate(10) # 10hz
 
     while not rospy.is_shutdown():
-        pub.publish(app.euler_angles[1])    # Change this to yaw variable
+        pub.publish(tracker.euler_angles[1])    # Change this to yaw variable
         rate.sleep()
 
 
 if __name__ == '__main__':
     try:
-        app = App()
+        tracker = FeatureTracker()
         node()
     except rospy.ROSInterruptException:
         pass
