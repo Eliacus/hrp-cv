@@ -28,7 +28,7 @@ class FeatureTracker:
         self.tracks = []
         self.frame_idx = 0
         self.prev_gray = None
-        self.euler_angles = [0,0,0]
+        self.euler_angles = [0, 0, 0]
 
     def isRotationMatrix(self, R):
         """
@@ -143,10 +143,7 @@ class FeatureTracker:
             except:
                 pass
 
-            if self.euler_angles[1] > 0:
-                print("Yaw left")
-            else:
-                print("Yaw right")
+            print(self.euler_angles[1])
 
         # Add one to the frame index.
         self.frame_idx += 1
