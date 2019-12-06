@@ -130,6 +130,8 @@ class FeatureTracker:
                     continue
             new_points = np.array(new_points)
             old_points = np.array(old_points)
+            new_points_1 = np.array(new_points_1)
+            old_points_1 = np.array(old_points_1)
 
             try:
                 # Compute the M matrx for the homogenious camera equations.
