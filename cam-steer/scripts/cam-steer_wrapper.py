@@ -31,19 +31,21 @@ def callback(data):
     # Use im to calculate yaw
     tracker.run(im)
     # rospy.loginfo(rospy.get_caller_id() + "The Compressed Image Data is:    %s", np.shape(im))
-    pub.publish(tracker.euler_angles[1])    # Change this to yaw variable
 
 def node():
+    pub = rospy.Publisher('cam_yaw', Float32, queue_size=1)
     rospy.init_node('cam_yaw')
     rospy.Subscriber('raspicam_node/image/compressed', CompressedImage, callback)
+    rate = rospy.Rate(30) # 10hz
 
     while not rospy.is_shutdown():
+        pub.publish(tracker.euler_angles[1])    # Change this to yaw variable
+        rate.sleep()
 
 
 if __name__ == '__main__':
     try:
         tracker = FeatureTracker()
-        pub = rospy.Publisher('cam_yaw', Float32, queue_size=1)
         node()
     except rospy.ROSInterruptException:
         pass
