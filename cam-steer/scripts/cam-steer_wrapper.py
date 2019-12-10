@@ -6,7 +6,7 @@ from sensor_msgs.msg import Image
 
 from std_msgs.msg import Float32
 from camera_algo import *
-from cv_bridge import CvBridge
+from cv_bridge import CvBridge as bridge
 
 import rospy
 import numpy as np
