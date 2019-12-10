@@ -32,6 +32,7 @@ def callback(data):
     #im = cv.imdecode(np_arr, 0)
     im = bridge.imgmsg_to_cv2(data, "mono8")
     rospy.loginfo(rospy.get_caller_id() + "The converted Image Data is:    %s", np.size(im,0)
+    cv.imshow(im)
     # Use im to calculate yaw
     tracker.run(im)
 def node():
