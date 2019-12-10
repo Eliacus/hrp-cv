@@ -7,7 +7,6 @@ MPSYS Project Course for HRP, group 20
 
 import numpy as np
 import cv2
-from comon import draw_str
 import math
 
 # Add some parameters to the SIFT-extraction.
@@ -71,7 +70,6 @@ class FeatureTracker:
         """
 
         frame_gray = curr_img
-        vis = frame_gray.copy()
 
         if len(self.tracks) > 0:
             img0, img1 = self.prev_gray, frame_gray
@@ -89,29 +87,24 @@ class FeatureTracker:
                 if len(tr) > self.track_len:
                     del tr[0]
                 new_tracks.append(tr)
-                cv2.circle(vis, (x, y), 2, (0, 255, 0), -1)
 
             self.tracks = new_tracks
-            cv2.polylines(vis, [np.int32(tr) for tr in self.tracks], False, (0, 255, 0))
-            draw_str(vis, (20, 20), 'track count: %d' % len(self.tracks))
 
         if self.frame_idx % self.detect_interval == 0:
             mask = np.zeros_like(frame_gray)
             mask[:] = 255
-            for x, y in [np.int32(tr[-1]) for tr in self.tracks]:
-                cv2.circle(mask, (x, y), 5, 0, -1)
             p = cv2.goodFeaturesToTrack(frame_gray, mask=mask, **feature_params)
             if p is not None:
                 for x, y in np.float32(p).reshape(-1, 2):
                     self.tracks.append([(x, y)])
 
-        # The calibrated camera parameters.
+        # The calibrated camera parameters, has to be integers.
         K = np.array([[993, 0, 673], [0, 990, 455], [0, 0, 1]])
 
-        # Begin the calcualtions when two of more frames are recieved.
+        # Begin the calculations when two of more frames are received.
         if self.frame_idx >= 2:
 
-            # Extract the feature points that is used to compute the homeography.
+            # Extract the feature points that is used to compute the homography.
             new_points = []
             old_points = []
             new_points_1 = []
@@ -128,19 +121,23 @@ class FeatureTracker:
                     old_points_1.append(self.tracks[i][-2])
                 except IndexError:
                     continue
+
             new_points = np.array(new_points)
             old_points = np.array(old_points)
             new_points_1 = np.array(new_points_1)
             old_points_1 = np.array(old_points_1)
 
             try:
+                # Extract M from the two different sets of points.
                 M, mask = cv2.findHomography(old_points_1, new_points_1, cv2.RANSAC, 5.0)
             except:
                 pass
 
             try:
+                # Compute the rotation and translation using the M and K matrix.
                 _, Rs, Ts, Ns = cv2.decomposeHomographyMat(M, K)
 
+                # Crate a list for counting the negative depth of 3D points in each direction.
                 neg_pts = []
 
                 old_points = np.matmul(np.invert(K), np.transpose(old_points))
@@ -150,7 +147,9 @@ class FeatureTracker:
 
                     counter = 0
 
+                    # Triangulate 3D points.
                     for j in range(min([len(new_points), len(old_points)])):
+                        # Construct camera matrices.
                         P1 = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0]]
                         P2 = []
                         for k in range(3):
@@ -182,15 +181,19 @@ class FeatureTracker:
 
                     neg_pts.append(counter)
 
+                # Extract the index of the rotation and translation matrices with least negative depth points.
                 ind_R = neg_pts.index(min(neg_pts))
 
+                # Convert the rotation matrix to euler angles.
                 euler_angles = self.rotationMatrixToEulerAngles(Rs[ind_R])
+
+                # Add the current euler angles to the total accumulated euler angles.
                 self.euler_angles += euler_angles
 
             except:
                 pass
 
-        print(self.euler_angles[1])
+        print(self.euler_angles)
 
         # Add one to the frame index.
         self.frame_idx += 1
