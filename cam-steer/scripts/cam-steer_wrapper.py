@@ -31,7 +31,7 @@ def callback(data):
     #np_arr = np.fromstring(data.data, np.uint8)
     #im = cv.imdecode(np_arr, 0)
     im = bridge.imgmsg_to_cv2(data, "mono8")
-    rospy.loginfo(rospy.get_caller_id() + "The converted Image Data is:    %s", np.size(im,1))
+    #rospy.loginfo(rospy.get_caller_id() + "The converted Image Data is:    %s", np.size(im,1))
     cv.imshow("image",im)
     cv.waitKey(3)
     # Use im to calculate yaw
