@@ -2,8 +2,11 @@
 
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import CompressedImage
+from sensor_msgs.msg import Image
+
 from std_msgs.msg import Float32
 from camera_algo import *
+import cv_bridge.CvBridge
 
 import rospy
 import numpy as np
@@ -25,17 +28,18 @@ import cv2 as cv
 
 def callback(data):
     # Convert image buffer
-    np_arr = np.fromstring(data.data, np.uint8)
-    im = cv.imdecode(np_arr, 0)
+    #np_arr = np.fromstring(data.data, np.uint8)
+    #im = cv.imdecode(np_arr, 0)
+    im = cv_image = bridge.imgmsg_to_cv2(data, "bgr8")
 
     # Use im to calculate yaw
     tracker.run(im)
-    # rospy.loginfo(rospy.get_caller_id() + "The Compressed Image Data is:    %s", np.shape(im))
+    rospy.loginfo(rospy.get_caller_id() + "The converted Image Data is:    %s", im)
 
 def node():
     pub = rospy.Publisher('cam_yaw', Float32, queue_size=1)
     rospy.init_node('cam_yaw')
-    rospy.Subscriber('raspicam_node/image/compressed', CompressedImage, callback)
+    rospy.Subscriber('raspicam_node/image', Image, callback)
     rate = rospy.Rate(10) # 10hz
 
     while not rospy.is_shutdown():
