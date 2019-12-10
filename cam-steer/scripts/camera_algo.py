@@ -106,7 +106,7 @@ class FeatureTracker:
                     self.tracks.append([(x, y)])
 
         # The calibrated camera parameters.
-        K = np.array([[993, 0, 673], [0, 990, 455], [0, 0, 1]])
+        K = np.array([[993.567273, 0, 673.844893], [0, 990.695013, 455.833150], [0, 0, 1]])
 
         # Begin the calcualtions when two of more frames are recieved.
         if self.frame_idx >= 2:
@@ -114,83 +114,36 @@ class FeatureTracker:
             # Extract the feature points that is used to compute the homeography.
             new_points = []
             old_points = []
-            new_points_1 = []
-            old_points_1 = []
             for i in range(len(self.tracks)):
                 try:
-                    vec1 = list(self.tracks[i][-1])
-                    vec1.append(1)
-                    new_points.append(vec1)
-                    new_points_1.append(self.tracks[i][-1])
-                    vec2 = list(self.tracks[i][-2])
-                    vec2.append(1)
-                    old_points.append(vec2)
-                    old_points_1.append(self.tracks[i][-2])
+                    new_points.append(self.tracks[i][-1])
+                    old_points.append(self.tracks[i][-2])
                 except IndexError:
                     continue
             new_points = np.array(new_points)
             old_points = np.array(old_points)
-            new_points_1 = np.array(new_points_1)
-            old_points_1 = np.array(old_points_1)
 
             try:
-                M, mask = cv2.findHomography(old_points_1, new_points_1, cv2.RANSAC, 5.0)
+                # Compute the M matrx for the homogenious camera equations.
+                M, mask = cv2.findHomography(old_points, new_points, cv2.RANSAC, 5.0)
             except:
                 pass
-
             try:
+                # Extract the rotation, Rs, and translation, Ts, from the M and K matrix.
                 _, Rs, Ts, Ns = cv2.decomposeHomographyMat(M, K)
-
-                neg_pts = []
-
-                old_points = np.matmul(np.invert(K), np.transpose(old_points))
-                new_points = np.matmul(np.invert(K), np.transpose(new_points))
-
                 for i in range(len(Rs)):
+                    try:
+                        # From the rotation matrix extract the euler angles, i.e. the difference in direction between the two frames.
+                        euler_angles_frame = self.rotationMatrixToEulerAngles(Rs[i])
 
-                    counter = 0
-
-                    for j in range(min([len(new_points), len(old_points)])):
-                        P1 = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0]]
-                        P2 = []
-                        for k in range(3):
-                            row = list(Rs[i][k][0:3])
-                            row.append(Ts[i][k][0])
-                            P2.append(row)
-
-                        A = []
-                        for m in range(3):
-                            row = P1[m]
-                            row.append(-old_points[j][m])
-                            row.append(0)
-                            A.append(row)
-                        for m in range(3):
-                            row = P2[m]
-                            row.append(0)
-                            row.append(-new_points[j][m])
-                            A.append(row)
-
-                        A = np.array(A)
-                        [U, W, V] = np.linalg.svd(A)
-
-                        V = V / V[3]
-
-                        Xs = V[:, -1]
-
-                        if Xs[4] < 0 or Xs[5] < 0:
-                            counter += 1
-
-                    neg_pts.append(counter)
-
-                ind_R = neg_pts.index(min(neg_pts))
-
-                euler_angles = self.rotationMatrixToEulerAngles(Rs[ind_R])
-                self.euler_angles += euler_angles
-
+                        # Add the euler angles to the total rotation of the robot.
+                        self.euler_angles += euler_angles_frame
+                    except:
+                        pass
             except:
                 pass
 
-        print(self.euler_angles[1])
+            #print(self.euler_angles[1])
 
         # Add one to the frame index.
         self.frame_idx += 1
