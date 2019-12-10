@@ -14,7 +14,7 @@ lk_params = dict(winSize=(15, 15),
                  maxLevel=5,
                  criteria=(cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.05))
 
-feature_params = dict(maxCorners=300,
+feature_params = dict(maxCorners=50,
                       qualityLevel=0.05,
                       minDistance=7,
                       blockSize=7)
@@ -128,7 +128,7 @@ class FeatureTracker:
 
             try:
                 # Extract M from the two different sets of points.
-                M, mask = cv2.findHomography(old_points_1, new_points_1, cv2.RANSAC, 5.0)
+                M, mask = cv2.findHomography(old_points_1, new_points_1, cv2.LMEDS, 5.0)
             except:
                 pass
 
