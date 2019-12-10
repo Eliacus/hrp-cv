@@ -97,7 +97,7 @@
     <param name="width" value="640"/>
     <param name="height" value="480"/>
 
-    <param name="framerate" value="10"/>
+    <param name="framerate" value="2"/>
   </node>
 
 </launch>
