@@ -15,11 +15,11 @@ import cv2 as cv
 def callback(data):
 
     # Compressded Image
-    #np_arr = np.fromstring(data.data, np.uint8)
-    #im = cv.imdecode(np_arr, 0)
+    np_arr = np.fromstring(data.data, np.uint8)
+    im = cv.imdecode(np_arr, 0)
 
     # Regular image
-    im = bridge.imgmsg_to_cv2(data, "mono8")
+    #im = bridge.imgmsg_to_cv2(data, "mono8")
 
     rospy.loginfo(rospy.get_caller_id() + "The converted Image Data is:    %s", np.size(im,1))
     #cv.imshow("image",im)
@@ -29,8 +29,8 @@ def callback(data):
 def node():
     pub = rospy.Publisher('cam_yaw', Float32, queue_size=1)
     rospy.init_node('cam_yaw')
-    rospy.Subscriber('raspicam_node/image', Image, callback)
-    #rospy.Subscriber('raspicam_node/image/compressed', CompressedImage, callback)
+    #rospy.Subscriber('raspicam_node/image', Image, callback)
+    rospy.Subscriber('raspicam_node/image/compressed', CompressedImage, callback)
 
     rate = rospy.Rate(10) # 10hz
 
