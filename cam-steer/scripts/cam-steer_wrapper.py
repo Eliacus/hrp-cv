@@ -12,30 +12,20 @@ import rospy
 import numpy as np
 import cv2 as cv
 
-# CompressedImage message
-#std_msgs/Header header
-#  uint32 seq
-#  time stamp
-#  string frame_id
-# string format
-# uint8[] data
-
-
-# Create subscriber
-
-
-# Create publisher
-
 def callback(data):
-    # Convert image buffer
+
+    # Compressded Image
     #np_arr = np.fromstring(data.data, np.uint8)
     #im = cv.imdecode(np_arr, 0)
+
+    # Regular image
     im = bridge.imgmsg_to_cv2(data, "mono8")
+
     rospy.loginfo(rospy.get_caller_id() + "The converted Image Data is:    %s", np.size(im,1))
-    cv.imshow("image",im)
-    cv.waitKey(3)
-    # Use im to calculate yaw
-    #tracker.run(im)
+    #cv.imshow("image",im)
+    #cv.waitKey(3)
+
+    tracker.run(im)
 def node():
     pub = rospy.Publisher('cam_yaw', Float32, queue_size=1)
     rospy.init_node('cam_yaw')
@@ -56,10 +46,6 @@ if __name__ == '__main__':
         node()
     except rospy.ROSInterruptException:
         pass
-
-
-
-#def init(self):
 
 
 
