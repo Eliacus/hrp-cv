@@ -36,7 +36,7 @@ def node():
     pub = rospy.Publisher('cam_yaw', Float32, queue_size=1)
     rospy.init_node('cam_yaw')
     rospy.Subscriber('raspicam_node/image/compressed', CompressedImage, callback)
-    rate = rospy.Rate(30) # 10hz
+    rate = rospy.Rate(10) # 10hz
 
     while not rospy.is_shutdown():
         pub.publish(tracker.euler_angles[1])    # Change this to yaw variable
