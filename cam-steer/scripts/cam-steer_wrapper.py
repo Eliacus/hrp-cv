@@ -28,19 +28,19 @@ import cv2 as cv
 
 def callback(data):
     # Convert image buffer
-    np_arr = np.fromstring(data.data, np.uint8)
-    im = cv.imdecode(np_arr, 0)
-    #im = bridge.imgmsg_to_cv2(data, "mono8")
-    #rospy.loginfo(rospy.get_caller_id() + "The converted Image Data is:    %s", np.size(im,1))
+    #np_arr = np.fromstring(data.data, np.uint8)
+    #im = cv.imdecode(np_arr, 0)
+    im = bridge.imgmsg_to_cv2(data, "mono8")
+    rospy.loginfo(rospy.get_caller_id() + "The converted Image Data is:    %s", np.size(im,1))
     cv.imshow("image",im)
     cv.waitKey(3)
     # Use im to calculate yaw
-    tracker.run(im)
+    #tracker.run(im)
 def node():
     pub = rospy.Publisher('cam_yaw', Float32, queue_size=1)
     rospy.init_node('cam_yaw')
-    #rospy.Subscriber('raspicam_node/image', Image, callback)
-    rospy.Subscriber('raspicam_node/image/compressed', CompressedImage, callback)
+    rospy.Subscriber('raspicam_node/image', Image, callback)
+    #rospy.Subscriber('raspicam_node/image/compressed', CompressedImage, callback)
 
     rate = rospy.Rate(10) # 10hz
 
@@ -52,7 +52,7 @@ def node():
 if __name__ == '__main__':
     try:
         bridge = CvBridge()
-        tracker = FeatureTracker()
+        #tracker = FeatureTracker()
         node()
     except rospy.ROSInterruptException:
         pass
