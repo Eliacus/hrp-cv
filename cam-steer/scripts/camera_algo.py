@@ -121,7 +121,6 @@ class FeatureTracker:
                     old_points_1.append(self.tracks[i][-2])
                 except IndexError:
                     continue
-
             new_points = np.array(new_points)
             old_points = np.array(old_points)
             new_points_1 = np.array(new_points_1)
@@ -132,7 +131,6 @@ class FeatureTracker:
                 M, mask = cv2.findHomography(old_points_1, new_points_1, cv2.RANSAC, 5.0)
             except:
                 pass
-
             try:
                 # Compute the rotation and translation using the M and K matrix.
                 _, Rs, Ts, Ns = cv2.decomposeHomographyMat(M, K)
@@ -144,6 +142,9 @@ class FeatureTracker:
                 new_points = np.matmul(np.invert(K), np.transpose(new_points))
 
                 for i in range(len(Rs)):
+                    try:
+                        # From the rotation matrix extract the euler angles, i.e. the difference in direction between the two frames.
+                        euler_angles_frame = self.rotationMatrixToEulerAngles(Rs[i])
 
                     counter = 0
 
@@ -193,7 +194,7 @@ class FeatureTracker:
             except:
                 pass
 
-        print(self.euler_angles)
+            #print(self.euler_angles[1])
 
         # Add one to the frame index.
         self.frame_idx += 1
