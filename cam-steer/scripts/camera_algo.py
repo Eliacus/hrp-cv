@@ -190,6 +190,8 @@ class FeatureTracker:
             except:
                 pass
 
+        print(self.euler_angles[1])
+
         # Add one to the frame index.
         self.frame_idx += 1
 
