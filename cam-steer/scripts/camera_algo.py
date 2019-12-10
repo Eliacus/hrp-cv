@@ -14,7 +14,7 @@ lk_params = dict(winSize=(15, 15),
                  maxLevel=5,
                  criteria=(cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.05))
 
-feature_params = dict(maxCorners=300,
+feature_params = dict(maxCorners=50,
                       qualityLevel=0.05,
                       minDistance=7,
                       blockSize=7)
