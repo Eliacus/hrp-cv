@@ -52,7 +52,7 @@ def node():
 if __name__ == '__main__':
     try:
         bridge = CvBridge()
-        #tracker = FeatureTracker()
+        tracker = FeatureTracker()
         node()
     except rospy.ROSInterruptException:
         pass
