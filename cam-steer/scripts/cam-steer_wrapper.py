@@ -30,7 +30,7 @@ def callback(data):
     # Convert image buffer
     #np_arr = np.fromstring(data.data, np.uint8)
     #im = cv.imdecode(np_arr, 0)
-    im = cv_image = bridge.imgmsg_to_cv2(data, "bgr8")
+    im = bridge.imgmsg_to_cv2(data, "bgr8")
 
     # Use im to calculate yaw
     tracker.run(im)
