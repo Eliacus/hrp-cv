@@ -23,7 +23,7 @@ def node():
     rospy.init_node('cam_ctrl')
     rospy.Subscriber('cam_yaw', Float32, callback)
 
-    rate = rospy.Rate(30) # 10hz
+    rate = rospy.Rate(10) # 10hz
 
     while not rospy.is_shutdown():
         rate.sleep()
