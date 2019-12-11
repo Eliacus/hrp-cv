@@ -1,5 +1,5 @@
 # hrp-cv
-hrp-cv is the source code used for a project in computer vision steering of a robotic lawnm mower (Husqvarna research platform) using ROS.
+hrp-cv is the source code used for a project in computer vision steering of a robotic lawn mower (Husqvarna research platform) using ROS.
 ## Requirements
 All the code was developed for Ubuntu 16.04 and ROS Kinetic. <br>  
 Besides this code, the Husqvarna research hrp source code (https://github.com/HusqvarnaResearch/hrp) was used to communicate with the robot.  <br>    
