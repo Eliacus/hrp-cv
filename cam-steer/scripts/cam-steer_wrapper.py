@@ -21,12 +21,14 @@ def callback(data):
     # Regular image
     im = bridge.imgmsg_to_cv2(data, "mono8")
 
-    rospy.loginfo(rospy.get_caller_id() + "The converted Image Data is:    %s", np.size(im,1))
+    # Displaying
+    #rospy.loginfo(rospy.get_caller_id() + "The converted Image Data is:    %s", np.size(im,1))
     #cv.imshow("image",im)
     #cv.waitKey(3)
 
     tracker.run(im)
 def node():
+    print("initating node")
     pub = rospy.Publisher('cam_yaw', Float32, queue_size=1)
     rospy.init_node('cam_yaw')
     rospy.Subscriber('raspicam_node/image', Image, callback)
