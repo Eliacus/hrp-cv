@@ -15,10 +15,11 @@ from sensor_fusion import SensorFusion
 
 def cam_callback(data):
     # Get camera yaw estimate
-    print("cam Angle : ", np.rad2deg(float(data.data)))
-    print("odom angle", last_odom)	
+    print("cam angle : ", np.rad2deg(float(data.data)))
+    print("odom angle", fusion_filter.odom)
+
     # Full kalman step according to the motion model and sensor readings
-    fusion_filter.take_step(float(data.data),last_odom)
+    fusion_filter.take_step(float(data.data))
 
     # Controller update
     ctrl =  controller.update(fusion_filter.x[0][0])
@@ -28,15 +29,13 @@ def cam_callback(data):
     twist = Twist()
     twist.angular.z = ctrl
     twist.linear.x = 0.0
-
+    
     pub.publish(twist)
     print("control signal", ctrl)
 
 def odom_callback(data):
     # Save odometer reading
-    last_odom = data.pose.pose.position.z
-    print(last_odom)
-
+    fusion_filter.update_odom(data.pose.pose.position.z)
 
 def node():
     rospy.Subscriber('cam_yaw', Float32, cam_callback)
