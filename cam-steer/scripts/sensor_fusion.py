@@ -64,7 +64,7 @@ class SensorFusion:
         """
 
         # High pass filter.
-        y_o_filt = ((self.alpha-self.T)*self.old_yo + self.alpha*(y_o - self.last_yc))/self.alpha
+        y_o_filt = ((self.alpha-self.T)*self.old_yo + self.alpha*(y_o - self.last_yo))/self.alpha
         self.last_yo = y_o
         self.old_yo = y_o_filt
 
