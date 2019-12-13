@@ -2,7 +2,7 @@ import numpy as np
 
 
 class SensorFusion:
-    def __init__(self, x_0, P_0, Q, R_c, R_o, T):
+    def __init__(self, x_0, P_0, Q, R_c, R_o, T, alpha_c, alpha_o):
         """
         Define internal variables.
         :param x_0: The prior mean
@@ -23,7 +23,8 @@ class SensorFusion:
         self.odom = 0
 
         # Some high-pass filter parameters.
-        self.alpha = 0.05
+        self.alpha_c = alpha_c
+        self.alpha_o = alpha_o
         self.old_yc = 0
         self.old_yo = 0
         self.last_yc = 0
@@ -45,7 +46,7 @@ class SensorFusion:
         """
 
         # High pass filter.
-        y_c_filt = ((self.alpha-self.T)*self.old_yc + self.alpha*(y_c - self.last_yc))/self.alpha
+        y_c_filt = ((self.alpha_c-self.T)*self.old_yc + self.alpha_c*(y_c - self.last_yc))/self.alpha_c
         self.last_yc = y_c
         self.old_yc = y_c_filt
 
@@ -64,7 +65,7 @@ class SensorFusion:
         """
 
         # High pass filter.
-        y_o_filt = ((self.alpha-self.T)*self.old_yo + self.alpha*(y_o - self.last_yo))/self.alpha
+        y_o_filt = ((self.alpha_o-self.T)*self.old_yo + self.alpha_o*(y_o - self.last_yo))/self.alpha_o
         self.last_yo = y_o
         self.old_yo = y_o_filt
 
