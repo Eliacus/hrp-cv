@@ -6,14 +6,15 @@ from std_msgs.msg import Float32
 from nav_msgs.msg import Odometry
 
 from camera_algo import *
-
+import numpy as np
 import rospy
 from cam_controller import Controller
 
 
 def callback(data):
     vel = controller.update(float(data.data))
-    print(vel)
+    print("velocity command: ", vel)
+    print(" Angle : ", np.rad2deg(float(data.data)))
     twist = Twist()
     twist.angular.z = vel
     twist.linear.x = 0.1
