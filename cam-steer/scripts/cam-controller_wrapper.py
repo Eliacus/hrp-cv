@@ -32,8 +32,6 @@ def odom_callback(data):
 
     last_odom = data.twist.twist.angular.z
 
-def init_node():
-
 
 
 def node():
@@ -76,7 +74,7 @@ if __name__ == '__main__':
 
         # Save last odometer reading
         last_odom = 0;
-        init_node()
+        
         node()
     except rospy.ROSInterruptException:
         pass
