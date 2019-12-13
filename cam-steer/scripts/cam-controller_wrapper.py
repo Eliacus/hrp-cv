@@ -30,7 +30,7 @@ def cam_callback(data):
 
 def odom_callback(data):
 
-    last_odom = data.twist.twist.angular.z
+    last_odom = data.pose.pose.position.z
     print(last_odom)
 
 
