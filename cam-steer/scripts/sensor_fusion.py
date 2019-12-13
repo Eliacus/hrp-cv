@@ -22,6 +22,13 @@ class SensorFusion:
         self.H = np.array([1, 0])
         self.odom = 0
 
+        # Some high-pass filter parameters.
+        self.alpha = 0.05
+        self.old_yc = 0
+        self.old_yo = 0
+        self.last_yc = 0
+        self.last_yo = 0
+
     def prediction(self):
         """
         Computes the Kalman prediction, returns the prediction x and the variance P.
@@ -36,7 +43,13 @@ class SensorFusion:
         :param y_c: The yaw measurement from the camera.
         :return: Updates self.x, self.P
         """
-        v = y_c - self.H*self.x
+
+        # High pass filter.
+        y_c_filt = ((self.alpha-self.T)*self.old_yc + self.alpha*(y_c - self.last_yc))/self.alpha
+        self.last_yc = y_c
+        self.old_yc = y_c_filt
+
+        v = y_c_filt - self.H*self.x
         S = self.H*self.P*np.transpose(self.H) + self.Rc
         K = np.array(self.P*np.transpose(self.H)*(1/S))
 
@@ -49,7 +62,13 @@ class SensorFusion:
         :param y_c: The yaw measurement from the odometer.
         :return: Updates self.x, self.P
         """
-        v = y_o - self.H * self.x
+
+        # High pass filter.
+        y_o_filt = ((self.alpha-self.T)*self.old_yo + self.alpha*(y_o - self.last_yc))/self.alpha
+        self.last_yo = y_o
+        self.old_yo = y_o_filt
+
+        v = y_o_filt - self.H * self.x
         S = self.H * self.P * np.transpose(self.H) + self.Rc
         K = np.array(self.P * np.transpose(self.H) * (1 / S))
 
