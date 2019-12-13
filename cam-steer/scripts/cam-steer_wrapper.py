@@ -23,8 +23,8 @@ def callback(data):
 
     # Displaying
     #rospy.loginfo(rospy.get_caller_id() + "The converted Image Data is:    %s", np.size(im,1))
-    #cv.imshow("image",im)
-    #cv.waitKey(3)
+    cv.imshow("image",im)
+    cv.waitKey(3)
 
     tracker.run(im)
 def node():
