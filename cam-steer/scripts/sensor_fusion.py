@@ -20,6 +20,7 @@ class SensorFusion:
         self.T = T
         self.A = np.array([[1, T], [0, 1]])
         self.H = np.array([1, 0])
+        self.odom = 0
 
     def prediction(self):
         """
@@ -55,7 +56,7 @@ class SensorFusion:
         self.x = self.x + K * v
         self.P = self.P - K * S * np.transpose(K)
 
-    def take_step(self, y_c, y_o):
+    def take_step(self, y_c):
         """
         Takes one update step using the measurements from both the camera and the odometer.
         :param y_c: Measurement from the camera.
@@ -64,5 +65,13 @@ class SensorFusion:
         """
         self.prediction()
         self.update_cam(y_c)
-        self.update_odometer(y_o)
+        self.update_odometer(self.odom)
+
+    def update_odom(self, odom_yaw):
+        """
+        updates internal variables-
+        :param odom_yaw:
+        :return:
+        """
+        self.odom = odom_yaw
 
