@@ -75,7 +75,7 @@ def node():
 
 if __name__ == '__main__':
     try:
-
+        P = 0.5
         node()
     except rospy.ROSInterruptException:
         pass
