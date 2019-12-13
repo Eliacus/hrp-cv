@@ -33,7 +33,7 @@ def node():
 
 if __name__ == '__main__':
     try:
-        P = 0.5
+        P = 0.8
         I = 0
         D = 0
         Ts = 0.1
