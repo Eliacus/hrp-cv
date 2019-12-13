@@ -33,6 +33,23 @@ def odom_callback(data):
     last_odom = data.twist.twist.angular.z
 
 def init_node():
+
+
+
+def node():
+    rospy.Subscriber('cam_yaw', Float32, cam_callback)
+    rospy.Subscriber('odom',Odometry, odom_callback)
+    rate = rospy.Rate(10) # 10hz
+
+    while not rospy.is_shutdown():
+        rate.sleep()
+
+
+
+
+
+if __name__ == '__main__':
+    try:
         # Discrete time step
         Ts = 0.1
 
@@ -59,22 +76,6 @@ def init_node():
 
         # Save last odometer reading
         last_odom = 0;
-
-
-def node():
-    rospy.Subscriber('cam_yaw', Float32, cam_callback)
-    rospy.Subscriber('odom',Odometry, odom_callback)
-    rate = rospy.Rate(10) # 10hz
-
-    while not rospy.is_shutdown():
-        rate.sleep()
-
-
-
-
-
-if __name__ == '__main__':
-    try:
         init_node()
         node()
     except rospy.ROSInterruptException:
