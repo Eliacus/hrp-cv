@@ -247,6 +247,8 @@ class FeatureTracker:
             except:
                 pass
 
+        self.euler_angles = -1 * self.euler_angles
+
         # Add one to the frame index.
         self.frame_idx += 1
 
