@@ -60,7 +60,7 @@ if __name__ == '__main__':
         controller = Controller(P,I,D,Ts)
 
         # Initialize sensor fusion algorithm
-        x_0 = np.ndarray([0,0])
+        x_0 = np.ndarray([[0],[0]])
         P_0 = np.array([[1,0],[0,1]])
         Q = np.array([[1, 0],[0, 1]])
         R_c = 1
