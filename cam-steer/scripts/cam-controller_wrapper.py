@@ -15,19 +15,22 @@ from sensor_fusion import SensorFusion
 
 def cam_callback(data):
     # Get camera yaw estimate
-    cam_yaw = controller.update(float(data.data))
-    print(" Angle : ", np.rad2deg(float(data.data)))
-
+    print("cam Angle : ", np.rad2deg(float(data.data)))
+    print("odom angle", last_odom)	
     # Full kalman step according to the motion model and sensor readings
-    fusion_filter.take_step(cam_yaw,last_odom)
+    fusion_filter.take_step(float(data.data),last_odom)
+
+    # Controller update
+    ctrl =  controller.update(fusion_filter.x[0][0])
 
     # Publish the result
-    print("Filtered angle:", fusion_filter.x[0])
+    print("Filtered angle:", np.rad2deg(fusion_filter.x[0][0]))
     twist = Twist()
-    twist.angular.z = fusion_filter.x[0]
-    twist.linear.x = 0
+    twist.angular.z = ctrl
+    twist.linear.x = 0.0
 
     pub.publish(twist)
+    print("control signal", ctrl)
 
 def odom_callback(data):
     # Save odometer reading
