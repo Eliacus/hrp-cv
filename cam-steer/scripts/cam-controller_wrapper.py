@@ -25,7 +25,7 @@ def cam_callback(data):
     print("Filtered angle:", fusion_filter.x[0])
     twist = Twist()
     twist.angular.z = fusion_filter.x[0]
-    twist.linear.x = 0.1
+    twist.linear.x = 0
 
     pub.publish(twist)
 
