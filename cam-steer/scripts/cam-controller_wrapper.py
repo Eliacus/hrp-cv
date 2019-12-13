@@ -13,6 +13,7 @@ from cam_controller import Controller
 
 def callback(data):
     vel = controller.update(float(data.data))
+    print(vel)
     twist = Twist()
     twist.angular.z = vel
     twist.linear.x = 0.1
