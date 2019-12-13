@@ -33,7 +33,7 @@ def node():
     rospy.init_node('cam_yaw')
     rospy.Subscriber('raspicam_node/image', Image, callback)
     #rospy.Subscriber('raspicam_node/image/compressed', CompressedImage, callback)
-
+    
     rate = rospy.Rate(10) # 10hz
 
     while not rospy.is_shutdown():

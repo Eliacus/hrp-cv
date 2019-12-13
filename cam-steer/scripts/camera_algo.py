@@ -128,7 +128,7 @@ class FeatureTracker:
 
             try:
                 # Extract M from the two different sets of points.
-                M, mask = cv2.findHomography(old_points_1, new_points_1, cv2.RANSAC, 3.0)
+                M, mask = cv2.findHomography(old_points_1, new_points_1, cv2.RANSAC, 5.0)
             except:
                 pass
 
@@ -191,6 +191,8 @@ class FeatureTracker:
 
             except:
                 pass
+
+        print(self.euler_angles[1])
 
         # Add one to the frame index.
         self.frame_idx += 1
