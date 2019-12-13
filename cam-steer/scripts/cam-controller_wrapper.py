@@ -27,15 +27,15 @@ def cam_callback(data):
     # Publish the result
     print("Filtered angle:", np.rad2deg(fusion_filter.x[0][0]))
     twist = Twist()
-    twist.angular.z = -ctrl
-    twist.linear.x = 0.1
+    twist.angular.z = 0
+    twist.linear.x = 0
 
     pub.publish(twist)
-    print("control signal", -ctrl)
+    print("control signal", ctrl)
 
 def odom_callback(data):
     # Save odometer reading
-    fusion_filter.update_odom(-data.pose.pose.position.z)
+    fusion_filter.update_odom(data.pose.pose.position.z)
 
 def node():
     rospy.Subscriber('cam_yaw', Float32, cam_callback)
@@ -55,8 +55,8 @@ if __name__ == '__main__':
 
         # Initialize PID controller
         P = 0.5
-        I = 0.01
-        D = 0.01
+        I = 0
+        D = 0
 
         controller = Controller(P,I,D,Ts)
 
@@ -64,8 +64,8 @@ if __name__ == '__main__':
         x_0 = np.array([[0],[0]])
         P_0 = np.array([[1,0],[0,1]])
         Q = np.array([[1, 0],[0, 1]])
-        R_c = 10
-        R_0 = 10
+        R_c = 5
+        R_0 = 5
 
         fusion_filter = SensorFusion(x_0,P_0,Q,R_c,R_0,Ts)
 
