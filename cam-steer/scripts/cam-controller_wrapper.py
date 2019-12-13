@@ -16,13 +16,13 @@ from sensor_fusion import SensorFusion
 def cam_callback(data):
     # Get
     cam_yaw = controller.update(float(data.data))
-    print("velocity command: ", vel)
     print(" Angle : ", np.rad2deg(float(data.data)))
 
     fusion_filter.take_step(cam_yaw,last_odom)
 
+    print("Filtered angle:", fusion_filter.x[0])
     twist = Twist()
-    twist.angular.z = fusion_filter.x
+    twist.angular.z = fusion_filter.x[0]
 
     twist.linear.x = 0.1
 
@@ -43,9 +43,9 @@ def init_node():
         controller = Controller(P,I,D,Ts)
 
         # Initialize sensor fusion algorithm
-        x_0 = 0
-        P_0 = 0
-        Q = np.ndarray([[1, 0],[0, 1]])
+        x_0 = np.ndarray([0,0])
+        P_0 = np.array([[1,0],[0,1]])
+        Q = np.array([[1, 0],[0, 1]])
         R_c = 1
         R_0 = 10
 
@@ -75,7 +75,7 @@ def node():
 
 if __name__ == '__main__':
     try:
-        P = 0.5
+        init_node()
         node()
     except rospy.ROSInterruptException:
         pass
