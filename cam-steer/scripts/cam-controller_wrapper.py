@@ -14,22 +14,23 @@ from cam_controller import Controller
 from sensor_fusion import SensorFusion
 
 def cam_callback(data):
-    # Get
+    # Get camera yaw estimate
     cam_yaw = controller.update(float(data.data))
     print(" Angle : ", np.rad2deg(float(data.data)))
 
+    # Full kalman step according to the motion model and sensor readings
     fusion_filter.take_step(cam_yaw,last_odom)
 
+    # Publish the result
     print("Filtered angle:", fusion_filter.x[0])
     twist = Twist()
     twist.angular.z = fusion_filter.x[0]
-
     twist.linear.x = 0.1
 
     pub.publish(twist)
 
 def odom_callback(data):
-
+    # Save odometer reading
     last_odom = data.pose.pose.position.z
     print(last_odom)
 
@@ -43,11 +44,10 @@ def node():
         rate.sleep()
 
 
-
-
-
 if __name__ == '__main__':
     try:
+        # ---------- Initialization ------------ #
+
         # Discrete time step
         Ts = 0.1
 
@@ -55,6 +55,7 @@ if __name__ == '__main__':
         P = 0.5
         I = 0
         D = 0
+
         controller = Controller(P,I,D,Ts)
 
         # Initialize sensor fusion algorithm
@@ -74,7 +75,9 @@ if __name__ == '__main__':
 
         # Save last odometer reading
         last_odom = 0;
-        
+
+        # Start node
         node()
+
     except rospy.ROSInterruptException:
         pass
