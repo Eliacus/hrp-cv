@@ -11,6 +11,8 @@ class SensorFusion:
         :param R_c: The camera measurement model variance
         :param R_o: The odometer measurement model variance
         :param T: The time step.
+        :param alpha_c: The high pass filter alpha for the camera.
+        :param alpha_o: The high pass filter alpha for the odometer.
         """
         self.x = x_0
         self.P = P_0
@@ -45,7 +47,7 @@ class SensorFusion:
         :return: Updates self.x, self.P
         """
 
-        # High pass filter.
+        # High pass filter for the camera.
         y_c_filt = ((self.alpha_c-self.T)*self.old_yc + self.alpha_c*(y_c - self.last_yc))/self.alpha_c
         self.last_yc = y_c
         self.old_yc = y_c_filt
@@ -64,7 +66,7 @@ class SensorFusion:
         :return: Updates self.x, self.P
         """
 
-        # High pass filter.
+        # High pass filter for the odometer.
         y_o_filt = ((self.alpha_o-self.T)*self.old_yo + self.alpha_o*(y_o - self.last_yo))/self.alpha_o
         self.last_yo = y_o
         self.old_yo = y_o_filt
