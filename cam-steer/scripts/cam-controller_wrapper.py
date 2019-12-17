@@ -8,7 +8,7 @@ from nav_msgs.msg import Odometry
 import numpy as np
 import rospy
 import time
-
+import csv
 
 from camera_algo import *
 from cam_controller import Controller
@@ -18,7 +18,10 @@ def cam_callback(data):
 
     # Full kalman step according to the motion model and sensor readings
     fusion_filter.take_step(float(data.data))
-
+    
+    # Printing raw measurements
+    print("Raw camera angle: ", float(data.data))
+    print("Raw odom angle: ", fusion_filter.odom)
     # Printing  HP filtered measurements
     print("HP-filtered camera angle: ", np.rad2deg(fusion_filter.old_yc))
     print("HP-filtered odom angle: ", np.rad2deg(fusion_filter.old_yo))
@@ -37,7 +40,7 @@ def cam_callback(data):
 
 
     # Writing to csv file
-    with open('log.csv', 'w+', newline='') as file:
+    with open('log.csv', 'a') as file:
         writer = csv.writer(file)
         writer.writerow([time.time()-start, float(data.data), fusion_filter.odom,
         fusion_filter.old_yc, fusion_filter.old_yo, fusion_filter.x[0][0]])
@@ -79,8 +82,8 @@ if __name__ == '__main__':
         R_0 = 10
 
         # Initialize High-Pass filter alphas
-        alpha_c = 0.05
-        alpha_o = 0.05
+        alpha_c = 0.95
+        alpha_o = 0.95
 
         # Create the fusion filter
         fusion_filter = SensorFusion(x_0,P_0,Q,R_c,R_0,Ts)
@@ -95,7 +98,7 @@ if __name__ == '__main__':
         last_odom = 0;
 
         # Start time
-        with open('log.csv', 'w+', newline='') as file:
+        with open('log.csv', 'w+') as file:
             writer = csv.writer(file)
             writer.writerow(["time","Raw cam yaw", "Raw odom yaw",
              "HP-filtered cam yaw",'HP-filtered odom yaw',
