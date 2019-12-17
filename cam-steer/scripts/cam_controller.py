@@ -22,11 +22,3 @@ class Controller:
         self.old_yaw = yaw
 
         return vel
-
-
-
-cam_controller = Controller(1,1,1,0.1)
-
-test = cam_controller.update(-0.15)
-
-print(test)

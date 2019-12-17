@@ -18,8 +18,8 @@ def cam_callback(data):
 
     # Full kalman step according to the motion model and sensor readings
     fusion_filter.take_step(float(data.data))
-   
- 
+
+
     # Printing raw measurements
     print("---------------------------------")
     print("Raw camera angle: ", float(data.data))
