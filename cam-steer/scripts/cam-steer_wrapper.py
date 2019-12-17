@@ -24,24 +24,22 @@ def callback(data):
 
     # Displaying
     #rospy.loginfo(rospy.get_caller_id() + "The converted Image Data is:    %s", np.size(im,1))
-    cv.imshow("image",im)
-    cv.waitKey(3)
-
+#    cv.imshow("image",im)
+#    cv.waitKey(3)
     tracker.run(im)
+
 def node():
     print("initating node")
     pub = rospy.Publisher('cam_yaw', Float32, queue_size=1)
     rospy.init_node('cam_yaw')
     #rospy.Subscriber('raspicam_node/image', Image, callback)
     rospy.Subscriber('raspicam_node/image/compressed', CompressedImage, callback)
-    
+
     rate = rospy.Rate(10) # 10hz
-    yaw_cam = []
-    i = 0
     while not rospy.is_shutdown():
-        pub.publish(tracker.euler_angles[1])    # Change this to yaw variable
-        yaw_cam.append(tracker.euler_angles[1])
-            
+	print("euler angles at publish: ", tracker.euler_angles)
+        pub.publish(0)    # Change this to yaw variable
+
         rate.sleep()
 
 
