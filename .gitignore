@@ -2,3 +2,5 @@ cam-steer/src/__pycache__/
 *.pyc
 .idea
 *.bag
+*.save
+*.swp
