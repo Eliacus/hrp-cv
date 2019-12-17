@@ -7,6 +7,7 @@ from nav_msgs.msg import Odometry
 
 import numpy as np
 import rospy
+import time
 
 
 from camera_algo import *
@@ -21,7 +22,7 @@ def cam_callback(data):
     # Printing  HP filtered measurements
     print("HP-filtered camera angle: ", np.rad2deg(fusion_filter.old_yc))
     print("HP-filtered odom angle: ", np.rad2deg(fusion_filter.old_yo))
-	
+
     # Controller update
     ctrl =  controller.update(fusion_filter.x[0][0])
 
@@ -33,6 +34,13 @@ def cam_callback(data):
 
     pub.publish(twist)
     print("control signal", ctrl)
+
+
+    # Writing to csv file
+    with open('log.csv', 'w+', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow([time.time()-start, float(data.data), fusion_filter.odom,
+        fusion_filter.old_yc, fusion_filter.old_yo, fusion_filter.x[0][0]])
 
 def odom_callback(data):
     # Save odometer reading
@@ -50,7 +58,11 @@ def node():
 if __name__ == '__main__':
     try:
         # ---------- Initialization ------------ #
-
+        with open('log.csv', 'w+', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(["time","Raw cam yaw", "Raw odom yaw",
+             "HP-filtered cam yaw",'HP-filtered odom yaw',
+             'Kalman filtered fused yaw'])
         # Discrete time step
         Ts = 0.1
 
@@ -63,19 +75,19 @@ if __name__ == '__main__':
 
         # ------------ Initialize sensor fusion algorithm -----------------
         # Initialize prior
-	x_0 = np.array([[0],[0]])
+	    x_0 = np.array([[0],[0]])
         P_0 = np.array([[1,0],[0,1]])
 
 	# Initialize Process and Measurement noise
         Q = np.array([[1, 0],[0, 1]])
         R_c = 5
         R_0 = 10
-	
-	# Initialize High-Pass filter alphas
-	alpha_c = 0.05
-	alpha_o = 0.05
 
-	# Create the fusion filter
+	# Initialize High-Pass filter alphas
+	   alpha_c = 0.05
+       alpha_o = 0.05
+
+    # Create the fusion filter
         fusion_filter = SensorFusion(x_0,P_0,Q,R_c,R_0,Ts)
 
         # Initialize ros publisher
@@ -86,6 +98,9 @@ if __name__ == '__main__':
 
         # Save last odometer reading
         last_odom = 0;
+
+        # Start time
+        start = time.time()
 
         # Start node
         node()
