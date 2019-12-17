@@ -247,7 +247,7 @@ class FeatureTracker:
             except:
                 pass
 
-        print("TEST" self.euler_angles[1])
+        print("TEST", self.euler_angles[1])
 
         self.euler_angles = -1 * self.euler_angles
 
