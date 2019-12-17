@@ -58,11 +58,6 @@ def node():
 if __name__ == '__main__':
     try:
         # ---------- Initialization ------------ #
-        with open('log.csv', 'w+', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(["time","Raw cam yaw", "Raw odom yaw",
-             "HP-filtered cam yaw",'HP-filtered odom yaw',
-             'Kalman filtered fused yaw'])
         # Discrete time step
         Ts = 0.1
 
@@ -75,10 +70,10 @@ if __name__ == '__main__':
 
         # ------------ Initialize sensor fusion algorithm -----------------
         # Initialize prior
-	    x_0 = np.array([[0],[0]])
+        x_0 = np.array([[0],[0]])
         P_0 = np.array([[1,0],[0,1]])
 
-       # Initialize Process and Measurement noise
+        # Initialize Process and Measurement noise
         Q = np.array([[1, 0],[0, 1]])
         R_c = 5
         R_0 = 10
@@ -100,6 +95,12 @@ if __name__ == '__main__':
         last_odom = 0;
 
         # Start time
+        with open('log.csv', 'w+', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(["time","Raw cam yaw", "Raw odom yaw",
+             "HP-filtered cam yaw",'HP-filtered odom yaw',
+             'Kalman filtered fused yaw'])
+
         start = time.time()
 
         # Start node
