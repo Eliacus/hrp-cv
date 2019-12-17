@@ -243,7 +243,7 @@ class FeatureTracker:
                 # Add the current euler angles to the total accumulated euler angles.
                 #if abs(euler_angles[1] - self.euler_angles[1]) < 0.035:
                 self.euler_angles += euler_angles
-                self.euler_angles = self.smooth(self.euler_angles)
+                #self.euler_angles = self.smooth(self.euler_angles)
             except:
                 pass
 

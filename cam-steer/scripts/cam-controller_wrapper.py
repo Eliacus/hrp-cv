@@ -18,8 +18,10 @@ def cam_callback(data):
 
     # Full kalman step according to the motion model and sensor readings
     fusion_filter.take_step(float(data.data))
-    
+   
+ 
     # Printing raw measurements
+    print("---------------------------------")
     print("Raw camera angle: ", float(data.data))
     print("Raw odom angle: ", fusion_filter.odom)
     # Printing  HP filtered measurements
@@ -82,8 +84,8 @@ if __name__ == '__main__':
         R_0 = 10
 
         # Initialize High-Pass filter alphas
-        alpha_c = 0.95
-        alpha_o = 0.95
+        alpha_c = 0.05
+        alpha_o = 0.05
 
         # Create the fusion filter
         fusion_filter = SensorFusion(x_0,P_0,Q,R_c,R_0,Ts)
