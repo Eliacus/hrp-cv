@@ -78,16 +78,16 @@ if __name__ == '__main__':
 	    x_0 = np.array([[0],[0]])
         P_0 = np.array([[1,0],[0,1]])
 
-	# Initialize Process and Measurement noise
+       # Initialize Process and Measurement noise
         Q = np.array([[1, 0],[0, 1]])
         R_c = 5
         R_0 = 10
 
-	# Initialize High-Pass filter alphas
-	   alpha_c = 0.05
-       alpha_o = 0.05
+        # Initialize High-Pass filter alphas
+        alpha_c = 0.05
+        alpha_o = 0.05
 
-    # Create the fusion filter
+        # Create the fusion filter
         fusion_filter = SensorFusion(x_0,P_0,Q,R_c,R_0,Ts)
 
         # Initialize ros publisher
