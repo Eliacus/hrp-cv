@@ -12,6 +12,7 @@ import rospy
 import numpy as np
 import cv2 as cv
 
+
 def callback(data):
 
     # Compressded Image
@@ -35,9 +36,12 @@ def node():
     rospy.Subscriber('raspicam_node/image/compressed', CompressedImage, callback)
     
     rate = rospy.Rate(10) # 10hz
-
+    yaw_cam = []
+    i = 0
     while not rospy.is_shutdown():
         pub.publish(tracker.euler_angles[1])    # Change this to yaw variable
+        yaw_cam.append(tracker.euler_angles[1])
+            
         rate.sleep()
 
 
