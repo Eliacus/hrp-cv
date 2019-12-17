@@ -249,12 +249,6 @@ class FeatureTracker:
 
         print("TEST", self.euler_angles[1])
 
-        self.euler_angles[0] = -1 * self.euler_angles[0]
-        self.euler_angles[1] = -1 * self.euler_angles[1]
-        self.euler_angles[2] = -1 * self.euler_angles[1]
-
-
-
         # Add one to the frame index.
         self.frame_idx += 1
 
