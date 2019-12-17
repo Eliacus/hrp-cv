@@ -236,19 +236,23 @@ class FeatureTracker:
 
                 # Extract the index of the rotation and translation matrices with least negative depth points.
                 ind_R = neg_pts.index(min(neg_pts))
-
+		
                 # Convert the rotation matrix to euler angles.
                 euler_angles = self.rotationMatrixToEulerAngles(Rs[ind_R])
-
+		
+		
                 # Add the current euler angles to the total accumulated euler angles.
                 #if abs(euler_angles[1] - self.euler_angles[1]) < 0.035:
                 self.euler_angles += euler_angles
-                self.euler_angles = self.smooth(self.euler_angles)
+                #self.euler_angles = self.smooth(self.euler_angles)
+	
             except:
                 pass
 
-        self.euler_angles = -1 * self.euler_angles
-
+        self.euler_angles[0] = -1.0 * self.euler_angles[0]
+	self.euler_angles[1] = -1.0 * self.euler_angles[1]
+	self.euler_angles[2] = -1.0 * self.euler_angles[2]
+	#print("after",self.euler_angles)
         # Add one to the frame index.
         self.frame_idx += 1
 
