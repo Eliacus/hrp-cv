@@ -18,7 +18,6 @@ def callback(data):
     # Compressded Image
     np_arr = np.fromstring(data.data, np.uint8)
     im = cv.imdecode(np_arr, 0)
-
     # Regular image
     #im = bridge.imgmsg_to_cv2(data, "mono8")
 
@@ -36,10 +35,10 @@ def node():
     rospy.Subscriber('raspicam_node/image/compressed', CompressedImage, callback)
 
     rate = rospy.Rate(10) # 10hz
+ 
     while not rospy.is_shutdown():
-	print("euler angles at publish: ", tracker.euler_angles)
-        pub.publish(0)    # Change this to yaw variable
-
+	
+        pub.publish(tracker.euler_angles[1])    # Change this to yaw variable
         rate.sleep()
 
 
