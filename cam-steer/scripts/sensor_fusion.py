@@ -53,7 +53,7 @@ class SensorFusion:
         S = np.dot(np.dot(self.H,self.P),np.transpose(self.H)) + self.Rc
         K = np.dot(self.P,np.transpose(self.H))*(1/S)
 
-        self.x = self.x + np.dot(K,v)
+        self.x = self.x + K*v
         self.P = self.P - np.dot(np.dot(K,S),np.transpose(K))
 
     def update_odometer(self, y_o):
@@ -72,7 +72,7 @@ class SensorFusion:
         S = np.dot(np.dot(self.H,self.P),np.transpose(self.H)) + self.Ro
         K = np.dot(self.P,np.transpose(self.H))*(1/S)
 
-        self.x = self.x + np.dot(K,v)
+        self.x = self.x + K*v
         self.P = self.P - np.dot(np.dot(K,S),np.transpose(K))
 
     def take_step(self, y_c):
