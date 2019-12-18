@@ -79,8 +79,8 @@ if __name__ == '__main__':
         P_0 = np.array([[1,0],[0,1]])
 
         # Initialize Process and Measurement noise
-        Q = np.array([[1, 0],[0, 1]])
-        R_c = 5
+        Q = np.array([[0.1, 0],[0, 0.1]])
+        R_c = 10
         R_0 = 10
 
         # Initialize High-Pass filter alphas
