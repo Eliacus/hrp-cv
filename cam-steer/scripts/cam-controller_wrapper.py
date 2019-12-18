@@ -22,8 +22,8 @@ def cam_callback(data):
 
     # Printing raw measurements
     print("---------------------------------")
-    print("Raw camera angle: ", float(data.data))
-    print("Raw odom angle: ", fusion_filter.odom)
+    print("Raw camera angle: ", np.rad2deg(float(data.data)))
+    print("Raw odom angle: ", np.rad2deg(fusion_filter.odom))
     # Printing  HP filtered measurements
     print("HP-filtered camera angle: ", np.rad2deg(fusion_filter.old_yc))
     print("HP-filtered odom angle: ", np.rad2deg(fusion_filter.old_yo))
@@ -34,7 +34,7 @@ def cam_callback(data):
     # Publish the result
     print("Kalman filtered angle:", np.rad2deg(fusion_filter.x[0][0]))
     twist = Twist()
-    twist.angular.z = 0
+    twist.angular.z = ctrl
     twist.linear.x = 0.2
 
     pub.publish(twist)
