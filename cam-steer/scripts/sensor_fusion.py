@@ -49,7 +49,7 @@ class SensorFusion:
         self.last_yc = y_c
         self.old_yc = y_c_filt
 
-        v = y_c_filt - self.H*self.x
+        v = y_c - self.H*self.x
         S = self.H*self.P*np.transpose(self.H) + self.Rc
         K = np.array(self.P*np.transpose(self.H)*(1/S))
 
@@ -68,7 +68,7 @@ class SensorFusion:
         self.last_yo = y_o
         self.old_yo = y_o_filt
 
-        v = y_o_filt - self.H * self.x
+        v = y_o - self.H * self.x
         S = self.H * self.P * np.transpose(self.H) + self.Rc
         K = np.array(self.P * np.transpose(self.H) * (1 / S))
 
@@ -93,4 +93,3 @@ class SensorFusion:
         :return:
         """
         self.odom = odom_yaw
-
