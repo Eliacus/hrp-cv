@@ -34,8 +34,8 @@ class SensorFusion:
         Computes the Kalman prediction, returns the prediction x and the variance P.
         :return: Updates self.x, self.P
         """
-        self.x = self.A*self.x
-        self.P = self.A*np.transpose(self.A) + self.Q
+        self.x = np.dot(self.A,self.x)
+        self.P = np.dot(np.dot(self.A,self.P),np.transpose(self.A))) + self.Q
 
     def update_cam(self, y_c):
         """
@@ -49,12 +49,12 @@ class SensorFusion:
         self.last_yc = y_c
         self.old_yc = y_c_filt
 
-        v = y_c - self.H*self.x
-        S = self.H*self.P*np.transpose(self.H) + self.Rc
-        K = np.array(self.P*np.transpose(self.H)*(1/S))
+        v = y_c - np.dot(self.H,self.x)
+        S = np.dot(np.dot(self.H,self.P),np.transpose(self.H)) + self.Rc
+        K = np.dot(self.P,np.transpose(self.H))*(1/S)
 
-        self.x = self.x + K*v
-        self.P = self.P - K*S*np.transpose(K)
+        self.x = self.x + np.dot(K,v)
+        self.P = self.P - np.dot(np.dot(K,S),np.transpose(K))
 
     def update_odometer(self, y_o):
         """
@@ -68,12 +68,12 @@ class SensorFusion:
         self.last_yo = y_o
         self.old_yo = y_o_filt
 
-        v = y_o - self.H * self.x
-        S = self.H * self.P * np.transpose(self.H) + self.Rc
-        K = np.array(self.P * np.transpose(self.H) * (1 / S))
+        v = y_o - np.dot(self.H,self.x)
+        S = np.dot(np.dot(self.H,self.P),np.transpose(self.H)) + self.Ro
+        K = np.dot(self.P,np.transpose(self.H))*(1/S)
 
-        self.x = self.x + K * v
-        self.P = self.P - K * S * np.transpose(K)
+        self.x = self.x + np.dot(K,v)
+        self.P = self.P - np.dot(np.dot(K,S),np.transpose(K))
 
     def take_step(self, y_c):
         """
