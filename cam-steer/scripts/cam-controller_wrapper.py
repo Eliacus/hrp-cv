@@ -32,7 +32,7 @@ def cam_callback(data):
     ctrl =  controller.update(fusion_filter.x[0][0])
 
     # Publish the result
-    print("Kalman filtered angle:", np.rad2deg(fusion_filter.x[0][0]))
+    print("Kalman filtered angle:", np.rad2deg(fusion_filter.x))
     twist = Twist()
     twist.angular.z = ctrl
     twist.linear.x = 0.2
@@ -45,7 +45,7 @@ def cam_callback(data):
     with open('log.csv', 'a') as file:
         writer = csv.writer(file)
         writer.writerow([time.time()-start, float(data.data), fusion_filter.odom,
-        fusion_filter.old_yc, fusion_filter.old_yo, fusion_filter.x[0][0]])
+        fusion_filter.x[0][0]])
 
 def odom_callback(data):
     # Save odometer reading
@@ -67,7 +67,8 @@ if __name__ == '__main__':
         Ts = 0.1
 
         # Initialize PID controller
-        P = 1
+        P = 2
+
         I = 0.02
         D = 0
 
@@ -80,7 +81,7 @@ if __name__ == '__main__':
 
         # Initialize Process and Measurement noise
         Q = np.array([[0.1, 0],[0, 0.1]])
-        R_c = 10
+        R_c = 5
         R_0 = 10
 
         # Initialize High-Pass filter alphas
@@ -103,7 +104,6 @@ if __name__ == '__main__':
         with open('log.csv', 'w+') as file:
             writer = csv.writer(file)
             writer.writerow(["time","Raw cam yaw", "Raw odom yaw",
-             "HP-filtered cam yaw",'HP-filtered odom yaw',
              'Kalman filtered fused yaw'])
 
         start = time.time()
