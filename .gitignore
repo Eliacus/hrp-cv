@@ -4,3 +4,4 @@ cam-steer/src/__pycache__/
 *.bag
 *.save
 *.swp
+*.orig

@@ -35,7 +35,7 @@ class SensorFusion:
         :return: Updates self.x, self.P
         """
         self.x = np.dot(self.A,self.x)
-        self.P = np.dot(np.dot(self.A,self.P),np.transpose(self.A))) + self.Q
+        self.P = np.dot(np.dot(self.A,self.P),np.transpose(self.A)) + self.Q
 
     def update_cam(self, y_c):
         """
