@@ -34,7 +34,7 @@ def cam_callback(data):
     # Publish the result
     print("Kalman filtered angle:", np.rad2deg(fusion_filter.x[0][0]))
     twist = Twist()
-    twist.angular.z = ctrl
+    twist.angular.z = 0
     twist.linear.x = 0.2
 
     pub.publish(twist)
