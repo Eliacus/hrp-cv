@@ -49,7 +49,7 @@ class SensorFusion:
         K = np.array([np.matmul(self.P,np.transpose(self.H))*(1/S)])
 
         self.x = self.x + K.transpose()*v
-        self.P = self.P - np.matmul(np.matmul(K,S),np.transpose(K))
+        self.P = self.P - np.matmul(np.dot(K,S),np.transpose(K))
 
     def update_odometer(self, y_o):
         """
@@ -63,7 +63,7 @@ class SensorFusion:
         K = np.array([np.matmul(self.P,np.transpose(self.H))*(1/S)])
 
         self.x = self.x + K.transpose()*v
-        self.P = self.P - np.matmul(np.matmul(K,S),np.transpose(K))
+        self.P = self.P - np.matmul(np.dot(K,S),np.transpose(K))
 
     def take_step(self, y_c):
         """
